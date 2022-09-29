@@ -163,8 +163,6 @@ run_sbt "$javaVersion" "$SBT_USER_HOME_ABSOLUTE" "$SBT_BINDIR/$SBT_JAR" "$SBT_TA
 
 status "<><><><><> Checkpoint 1"
 
-write_sbt_dependency_classpath_log "$SBT_USER_HOME_ABSOLUTE" "$SBT_BINDIR/$SBT_JAR" "show dependencyClasspath"
-
 status "<><><><><> Checkpoint 2"
 
 # repack cache
