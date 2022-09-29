@@ -161,13 +161,19 @@ fi
 # build app
 run_sbt "$javaVersion" "$SBT_USER_HOME_ABSOLUTE" "$SBT_BINDIR/$SBT_JAR" "$SBT_TASKS"
 
+status "<><><><><> Checkpoint 1"
+
 write_sbt_dependency_classpath_log "$SBT_USER_HOME_ABSOLUTE" "$SBT_BINDIR/$SBT_JAR" "show dependencyClasspath"
+
+status "<><><><><> Checkpoint 2"
 
 # repack cache
 mkdir -p $CACHE_DIR
 for DIR in $CACHED_DIRS; do
   cache_copy $DIR $BUILD_DIR $CACHE_DIR
 done
+
+status "<><><><><> Checkpoint 3"
 
 # drop useless directories from slug for play and sbt-native-launcher only
 if is_sbt_native_packager $BUILD_DIR || is_play $BUILD_DIR; then
@@ -203,6 +209,8 @@ if is_sbt_native_packager $BUILD_DIR || is_play $BUILD_DIR; then
   fi
 fi
 
+status "<><><><><> Checkpoint 4"
+
 # write profile.d script
 profileScript="${BUILD_DIR}/.profile.d/scala.sh"
 mkdir -p $(dirname $profileScript)
@@ -211,13 +219,19 @@ export SBT_HOME="\$HOME/$SBT_USER_HOME"
 export PATH="\$SBT_HOME/bin:\$PATH"
 EOF
 
+status "<><><><><> Checkpoint 5"
+
 # Move compiled app back to where Heroku expects it
 if [ -z "${CNB_STACK_ID:-}" ] && is_app_dir "$APP_BUILD_DIR"; then
   mv $BUILD_DIR $APP_BUILD_DIR
 fi
+
+status "<><><><><> Checkpoint 6"
 
 # write export script
 cat << EOF > "${BASE_DIR}/export"
 export SBT_HOME="$APP_BUILD_DIR/$SBT_USER_HOME"
 export PATH="\$SBT_HOME/bin:\$PATH"
 EOF
+
+status "<><><><><> Checkpoint 7"
